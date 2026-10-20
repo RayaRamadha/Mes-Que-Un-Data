@@ -1,0 +1,22 @@
+# Dependensi langsung pipeline (Python 3.11). Versi dipin agar submission bisa dibuat ulang PERSIS.
+# Kunci lengkap semua sub-dependensi ada di requirements-lock.txt.
+#
+#   py -3.11 -m venv .venv
+#   .venv\Scripts\python -m pip install -r requirements-lock.txt
+
+# komputasi
+numpy==1.26.4
+pandas==3.0.2
+
+# plot di notebook (eksplorasi)
+matplotlib==3.11.2
+
+# menjalankan notebook dari baris perintah (run_all)
+ipykernel==7.4.0
+ipython==9.17.1
+nbclient==0.11.0
+nbconvert==7.17.2
+nbformat==5.11.1
+
+# membersihkan output notebook saat commit (git filter)
+nbstripout==0.9.1
