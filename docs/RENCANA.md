@@ -113,7 +113,10 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/00_setup_cek_data.
 | 1.3 | `03_bola_mati.ipynb`: fitur kolektif + Viterbi 2 keadaan (ide v2), aturan pasti (prior babak 2, gol→kick-off) ditulis di notebook | jalan dari `prep.npz` saja |
 | 1.4 | Submission end-to-end paling sederhana: D dari tahap 3 + H/A dari baseline nearest-player yang dihaluskan di dalam segmen hidup | lolos `validate_submission.py`; tercatat di log |
 
-**Gerbang Fase 1:** ada satu file valid yang bisa dihasilkan ulang dari nol dengan satu perintah.
+**Gerbang Fase 1:** ada satu file valid yang bisa dihasilkan ulang dari nol dengan satu perintah. ✅ (20 Okt)
+
+> **Penyesuaian setelah Fase 1:** v0 menunjukkan `D` palsu adalah hambatan terbesar (memakan frame hidup dan
+> memecah possession). Langkah **3.1 (bola mati v3 → presisi)** dimajukan dan dikerjakan berdampingan dengan Fase 2.
 
 ### Fase 2 — Model possession v1 (27 Okt – 2 Nov)
 
@@ -217,7 +220,7 @@ Setiap eksperimen satu baris di `docs/experiment_log.md`:
 |---|---|---|
 | Skrip uji coba lama (`.py`) | 🗑️ dihapus | pelajarannya tercatat di laporan `cache/*.txt` lama; dibangun ulang di Fase 1 |
 | Fase 0 — Fondasi | ✅ 20 Okt (kecuali 0.1) | git + submodule resmi + nbstripout, `.venv` Py 3.11 dipin, `common.ipynb`, `00_setup_cek_data.ipynb` **35/35 PASS**, run_all, README, log, kerangka laporan. **0.1 nama & anggota tim masih terbuka** |
-| Fase 1 — Port + submission pertama | ⬜ belum | |
+| Fase 1 — Bangun ulang + submission pertama | ✅ 20 Okt | 01 preprocess (regresi identik), 02 EDA GT publik (kesimpulan desain), 03 bola mati v3, 06 v0 → file valid, reproduksi hash identik dari nol (± 1 menit). Publik spellF1 0,344 [0,19–0,50] vs baseline 0,326. **Hambatan: presisi D (0,52)** |
 | Fase 2 — Model possession v1 | ⬜ belum | |
 | Fase 3 — Peningkatan | ⬜ belum | |
 | Fase 4 — Pembekuan & dokumentasi | ⬜ belum | |
