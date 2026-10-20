@@ -1,4 +1,4 @@
-# More than a Hack 2027 — Ball Possession · solusi tim `NAMA_TIM`
+# More than a Hack 2027 — Ball Possession · solusi tim **Més Que Un Data**
 
 Solusi untuk [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/more-than-a-hack-2027):
 memberi label `H` / `A` / `D` / `X` pada setiap 199.319 frame video tactical FC Barcelona – Athletic Club.
@@ -67,4 +67,4 @@ Setiap notebook diakhiri cek otomatis; run berhenti di notebook pertama yang gag
 
 ## Tim
 
-`NAMA_TIM` — anggota: _(diisi)_
+**Més Que Un Data** — anggota: _(diisi)_

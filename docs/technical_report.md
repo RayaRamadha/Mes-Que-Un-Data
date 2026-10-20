@@ -1,8 +1,8 @@
 # Ball possession dari tracking otomatis — dokumen teknis
 
-**Tim:** `NAMA_TIM` · **Repo:** _(URL publik)_ · **File:** `NAMA_TIM.csv` · **SHA-256 CSV:** _(diisi saat submit)_
+**Tim:** Més Que Un Data · **Repo:** _(URL publik)_ · **File:** _(nama final ditetapkan di Fase 5)_ · **SHA-256 CSV:** _(diisi saat submit)_
 
-> Kerangka sesuai SUBMISSION.md. Diisi bertahap selama Fase 1–3, difinalkan di Fase 4.3; ekspor ke `NAMA_TIM.pdf`.
+> Kerangka sesuai SUBMISSION.md. Diisi bertahap selama Fase 1–3, difinalkan di Fase 4.3; ekspor ke PDF bernama tim.
 > Hanya angka agregat — tidak ada data per frame di dokumen ini.
 
 ## 1. Ringkasan
@@ -55,7 +55,7 @@ _(3–5 kalimat: apa yang dibangun, ide utamanya, hasil pada GT publik dengan in
 ```bash
 git clone --recurse-submodules <repo>
 py -3.11 -m venv .venv && .venv\Scripts\python -m pip install -r requirements-lock.txt
-powershell -ExecutionPolicy Bypass -File run_all.ps1      # → submissions/NAMA_TIM.csv
+powershell -ExecutionPolicy Bypass -File run_all.ps1      # → submissions/MesQueUnData_<versi>.csv
 ```
 
 Waktu jalan total: … · Hash CSV yang dihasilkan harus sama dengan yang di atas.
