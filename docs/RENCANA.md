@@ -40,7 +40,7 @@
 Semua kode dalam **Jupyter notebook** dengan markdown yang menjelaskan setiap langkah.
 
 ```
-C:\lomba barca\                       ← root repo git (nanti dipublikasikan)
+C:\Més Que Un Data\                    ← root repo git (dulu C:\lomba barca; nanti dipublikasikan)
 ├─ README.md                          cara install & reproduksi (1 perintah)
 ├─ requirements.txt                   versi dipin (numpy, pandas, jupyter, nbconvert, ...)
 ├─ .gitignore                         tactical/ broadcast/ cache/ submissions/ *.zip
@@ -95,7 +95,7 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/00_setup_cek_data.
 | 0.1 | Konfirmasi tim 3–5 orang & nama tim (nama file CSV/PDF = nama tim) | nama tim tertulis di README |
 | 0.2 | Cek versi Python, buat venv, `requirements.txt` dipin | `pip install -r requirements.txt` bersih di venv baru |
 | 0.3 | `git init`, `.gitignore`, repo resmi sebagai submodule, nbstripout | `git status` tidak menampilkan file data |
-| 0.4 | Set `MTAH_DATA_DIR = C:\lomba barca`; samakan nama video broadcast (`-001`) | `games.require(...)` lolos untuk semua aset yang ada |
+| 0.4 | Data di akar repo (default `common.ipynb`; `MTAH_DATA_DIR` opsional); nama video tak standar (`-001`, `-002`) ditangani `asset_path()` | `games.require(...)` lolos untuk semua aset yang ada |
 | 0.5 | Video tactical: ada (`BAR-ATH_tactical-002.mp4`); tidak dipakai sampai stretch 3.6 | keputusan tercatat di notebook 00 |
 | 0.6 | `common.ipynb` + `00_setup_cek_data.ipynb` | notebook jalan via nbconvert tanpa error |
 | 0.7 | Buat `docs/experiment_log.md` & kerangka `technical_report.md` | file ada |
