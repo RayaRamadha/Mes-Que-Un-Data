@@ -1,6 +1,6 @@
 # Ball possession from automatic tracking — technical document
 
-**Team:** Més Que Un Data — Raya Ramadha Fitroh, Fauzan Ahsanudin Alfikri, Gabriel Edbert Liandrew, Benedict Brian Joel Purba, Yan Ardhinaya Ardika · **Repository:** _(public URL)_ · **File:** _(final name set at submission)_ · **CSV SHA-256:** _(filled in at submission)_
+**Team:** Més Que Un Data — Raya Ramadha Fitroh, Fauzan Ahsanudin Alfikri, Gabriel Edbert Liandrew, Benedict Brian Joel Purba, Yan Ardhinaya Ardika · **Repository:** https://github.com/RayaRamadha/Mes-Que-Un-Data · **File:** _(final name set at submission)_ · **CSV SHA-256:** _(filled in at submission)_
 
 > **Status: draft (21 Oct 2026), pipeline version v4.** Structure follows SUBMISSION.md. To be finalised before
 > submission and exported to a PDF named after the team. Aggregate numbers only — no frame-level data appears in this
@@ -143,7 +143,7 @@ dead-ball share priors of 0.45–0.48 and degrade from 0.51; anchor strengths of
 ## 8. Reproduction
 
 ```bash
-git clone --recurse-submodules <repo>
+git clone --recurse-submodules https://github.com/RayaRamadha/Mes-Que-Un-Data.git
 py -3.11 -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-lock.txt
 powershell -ExecutionPolicy Bypass -File run_all.ps1      # -> submissions/MesQueUnData_<version>.csv

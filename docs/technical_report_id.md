@@ -1,6 +1,6 @@
 # Ball possession dari tracking otomatis — dokumen teknis
 
-**Tim:** Més Que Un Data — Raya Ramadha Fitroh, Fauzan Ahsanudin Alfikri, Gabriel Edbert Liandrew, Benedict Brian Joel Purba, Yan Ardhinaya Ardika · **Repo:** _(URL publik)_ · **File:** _(nama final ditetapkan di Fase 5)_ · **SHA-256 CSV:** _(diisi saat submit)_
+**Tim:** Més Que Un Data — Raya Ramadha Fitroh, Fauzan Ahsanudin Alfikri, Gabriel Edbert Liandrew, Benedict Brian Joel Purba, Yan Ardhinaya Ardika · **Repo:** https://github.com/RayaRamadha/Mes-Que-Un-Data · **File:** _(nama final ditetapkan di Fase 5)_ · **SHA-256 CSV:** _(diisi saat submit)_
 
 > **Salinan kerja berbahasa Indonesia** — versi yang dikirim: `technical_report.md` (bahasa Inggris); isi harus tetap sama.
 >
@@ -138,7 +138,7 @@ keterlambatan bukti bentuk tim (terukur ± 4 s tanpa GT, tetapi koreksinya mempe
 ## 8. Reproduksi
 
 ```bash
-git clone --recurse-submodules <repo>
+git clone --recurse-submodules https://github.com/RayaRamadha/Mes-Que-Un-Data.git
 py -3.11 -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-lock.txt
 powershell -ExecutionPolicy Bypass -File run_all.ps1      # → submissions/MesQueUnData_<versi>.csv

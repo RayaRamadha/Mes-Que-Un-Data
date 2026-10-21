@@ -31,8 +31,8 @@ dan `submissions/` (file CSV).
 Python **3.11**.
 
 ```bash
-git clone --recurse-submodules <url-repo-ini>
-cd <repo>
+git clone --recurse-submodules https://github.com/RayaRamadha/Mes-Que-Un-Data.git
+cd Mes-Que-Un-Data
 py -3.11 -m venv .venv                                     # macOS/Linux: python3.11 -m venv .venv
 .venv\Scripts\python -m pip install -r requirements-lock.txt
 .venv\Scripts\nbstripout --install --attributes .gitattributes   # hanya untuk kontributor
