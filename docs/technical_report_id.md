@@ -4,19 +4,20 @@
 
 > **Salinan kerja berbahasa Indonesia** — versi yang dikirim: `technical_report.md` (bahasa Inggris); isi harus tetap sama.
 >
-> **Status: draf (20 Okt 2026), versi pipeline v3.** Struktur mengikuti SUBMISSION.md. Difinalkan di Fase 4.3 lalu
+> **Status: draf (21 Okt 2026), versi pipeline v4.** Struktur mengikuti SUBMISSION.md. Difinalkan di Fase 4.3 lalu
 > diekspor ke PDF bernama tim. Hanya angka agregat — tidak ada data per frame di dokumen ini. Angka GT publik selalu
 > dari 5 menit pertama (17 possession) dan hanya untuk cek kebenaran.
 
 ## 1. Ringkasan
 
 Kami memisahkan masalah menjadi dua keputusan yang masing-masing diselesaikan sebagai **segmentasi**, bukan
-klasifikasi per frame: (1) **bola hidup atau mati**, dengan fitur kolektif pemain dan bola, "jangkar" bukti yang
+klasifikasi per frame: (1) **bola hidup atau mati**, dengan fitur kolektif pemain dan bola, siaran broadcast sebagai saksi kedua, "jangkar" bukti yang
 hampir pasti, dan Viterbi dua keadaan; (2) **tim mana yang menguasai bola**, dengan model logistik atas **bentuk tim**
 (lebar, sebaran, kecepatan relatif) yang dilatih dari *pseudo-label* "kontrol jelas" di seluruh pertandingan — tanpa
 ground truth — sehingga bekerja juga pada ± 41% frame dinilai saat bola tidak terlihat. Keduanya digabung oleh
 Viterbi tiga keadaan (H/A/D) dengan biaya pergantian dalam "detik bukti". Pada GT publik, versi v3 mencapai
-**spellF1 ± 0,64 [0,40 – 0,81]** (baseline resmi ± 0,33 [0,21 – 0,45]) dan macroF1 ± 0,87. Seluruh pipeline adalah
+**spellF1 ± 0,67 [0,44 – 0,83]** (baseline resmi ± 0,33 [0,21 – 0,45]) dan macroF1 ± 0,89. Rekaman broadcast yang tidak
+sinkron diselaraskan ke timeline tactical hanya lewat posisi pemain. Seluruh pipeline adalah
 notebook Jupyter yang dijalankan berurutan oleh satu perintah dan menghasilkan file yang identik byte demi byte.
 
 ## 2. Pendekatan & alasannya
@@ -35,7 +36,8 @@ ATD + Smart Tagging ─► 01 preprocess ─► 03 bola mati (hidup/mati + resta
 
 | Tahap | Inti |
 |---|---|
-| `03` bola mati | 6 fitur kolektif (pemain tenang relatif norma lokal, tidak ada operan, celah bola, bola dekat garis, bola pelan, jendela set piece) dengan bobot dari prinsip; **jangkar** ±3 per frame: perebutan bola → hidup, bola ≥ 1 m di luar garis selama ≥ 1 s → mati, celah bola ≥ 10 s → mati; Viterbi 2 keadaan (biaya pergantian 20, segmen minimum 2 s); bias dipilih agar porsi `D` = prior **0,48**; segmen `D` wajib memuat ≥ 1 isyarat henti |
+| `01` broadcast | penyelarasan broadcast ↔ tactical lewat posisi pemain (offset tetap per babak); bola broadcast mengisi celah bola tactical; jenis gambar siaran per frame (lapangan / replay atau close-up) |
+| `03` bola mati | 7 fitur kolektif (pemain tenang relatif norma lokal, tidak ada operan, celah bola, bola dekat garis, **siaran menayangkan replay/close-up**, bola pelan, jendela set piece) dengan bobot dari prinsip; **jangkar** ±3 per frame: perebutan bola → hidup, bola ≥ 1 m di luar garis selama ≥ 1 s → mati, celah bola ≥ 10 s → mati; Viterbi 2 keadaan (biaya pergantian 20, segmen minimum 2 s); bias dipilih agar porsi `D` = prior **0,48**; segmen `D` wajib memuat ≥ 1 isyarat henti |
 | `04`–`05` tim | pseudo-label "kontrol jelas" (pemain ≤ 1,5 m dari bola teramati, lawan ≥ 3 m, ≥ 0,5 s) → logistik (IRLS + L2) atas 6 selisih bentuk tim H − A yang dihaluskan ± 2 s; prediksi *out-of-fold* per blok waktu; ditambah β × "tim terdekat ke bola" dengan β ≈ 1,0 ditaksir tanpa GT |
 | `06` decoder | Viterbi H/A/D per babak; `D` dari tahap 03; pergantian H↔A membayar 1 s × median \|log-odds\|; 2 s pertama setelah sepak pojok/tendangan gawang/tendangan bebas diberikan ke tim pengambil |
 
@@ -51,7 +53,7 @@ sepak bola/fisika atau dari data pertandingan sendiri (pseudo-label, jangkar, pr
 | ATD tactical | **ya** — sumber utama | posisi & kecepatan pemain per slot, posisi bola; tim per slot dari XML |
 | Smart Tagging | **sebagian** | jendela & awal `SET PIECES` (fitur lemah + isyarat henti), `Kick Off (After Goal)` (aturan pasti), `Team` sepak pojok/tendangan gawang/tendangan bebas = **tim pengambil** (diverifikasi geometri: sepak pojok 12/12 di separuh lawan tim tag). Tag fase (Build Up, Defending…) **tidak** dipakai: di jendela publik hanya cocok 60–76% dengan possession — fase bukan possession |
 | Homography tactical | tidak | ATD sudah dalam koordinat lapangan; dicek valid 100% |
-| ATD + homography broadcast | belum | tidak sinkron; opsi untuk mengisi celah bola (tahap lanjut) |
+| ATD + homography broadcast | **ya** | diselaraskan lewat posisi pemain (offset tetap per babak ± 160,6 s dan ± 1076,8 s, drift dapat diabaikan; pemain cocok ± 0,75 m, bola ± 0,8 m). Dipakai untuk: (1) bola broadcast mengisi celah tactical (bola tersedia 59% → ± 63% frame dinilai; 39% frame hidup tanpa bola tactical tertolong); (2) jenis gambar siaran — saat replay/close-up (homografi tidak valid, 33% frame dinilai) pemain bergerak seperti bola mati (± 1,0 vs ± 2,1 m/s) → bukti bola mati |
 | Video tactical / broadcast | tidak | — |
 | GT publik 5 menit | hanya cek | memahami definisi `D` & pergantian (`02`); skor dengan interval bootstrap sebagai cek kebenaran |
 | Pengetahuan eksternal | ya | porsi bola mati ≈ 0,48 dari waktu bermain efektif LaLiga yang umum (± 50–56 menit dari ± 95–100) |
@@ -99,7 +101,8 @@ proxy membaik dan GT publik tidak memburuk. Semua eksperimen tercatat di `docs/e
 | v0 | detektor `D` v3 + Viterbi atas tim terdekat | 0,34 [0,19 – 0,50] | 0,72 | 0,69 |
 | v1 | + model bentuk tim | 0,54 [0,32 – 0,74] | 0,77 | 0,75 |
 | v2 | + jangkar & aktivitas operan di `D` | 0,59 [0,37 – 0,77] | 0,86 | 0,89 |
-| **v3** | + syarat isyarat henti, prior restart | **0,64 [0,40 – 0,81]** | **0,87** | **0,90** |
+| v3 | + syarat isyarat henti, prior restart | 0,64 [0,40 – 0,81] | 0,87 | 0,90 |
+| **v4** | + broadcast: bola mengisi celah, replay/close-up sebagai bukti bola mati | **0,67 [0,44 – 0,83]** | **0,89** | **0,90** |
 
 **Detektor bola mati — ablation dengan proxy tanpa GT** (porsi `D` sama).
 
@@ -107,7 +110,8 @@ proxy membaik dan GT publik tidak memburuk. Semua eksperimen tercatat di `docs/e
 |---|---|---|---|---|
 | fitur saja | 20% | 85% | 79% | 0,52 / 0,91 |
 | + jangkar + operan | 0,7% | 96% | 100% | 0,80 / 0,81 |
-| + syarat isyarat henti (final) | 1,3% | 97,5% | 100% | 0,85 / 0,81 |
+| + syarat isyarat henti | 1,3% | 97,5% | 100% | 0,85 / 0,81 |
+| + bola & fitur replay/close-up broadcast (final) | 1,0% | 96,9% | 100% | 0,86 / 0,86 |
 
 **Model bentuk tim.** Validasi silang per blok waktu pada pseudo-label yang disisihkan: AUC ± 0,91 (blok terburuk
 ± 0,82). Keandalan "tim terdekat" ditaksir tanpa GT (q ± 0,73) dan cocok dengan yang terlihat di GT publik (± 74%).
@@ -142,5 +146,5 @@ powershell -ExecutionPolicy Bypass -File run_all.ps1      # → submissions/MesQ
 
 Data diletakkan di `tactical/` dan `broadcast/` di akar repo (atau `MTAH_DATA_DIR`). Notebook `00` memverifikasi
 data dan lingkungan (35 cek). Diukur pada clone bersih dengan venv baru (21 Okt 2026): instalasi ± 2,5 menit, seluruh pipeline (notebook 00–07)
-± 3 menit di CPU laptop. Hash SHA-256 CSV yang dihasilkan harus sama dengan yang tertulis di atas; untuk versi v3:
-`9f54b0282f3c11980de12912f02b2cebd97499eed8d370efaacf459541110ba3`.
+± 5 menit di CPU laptop. Hash SHA-256 CSV yang dihasilkan harus sama dengan yang tertulis di atas; untuk versi v4:
+`627a5cc0d79798dc70db0d3087cfdb13c889dc8d08131eea306425c08de56afe`.
