@@ -146,5 +146,5 @@ powershell -ExecutionPolicy Bypass -File run_all.ps1      # → submissions/MesQ
 
 Data diletakkan di `tactical/` dan `broadcast/` di akar repo (atau `MTAH_DATA_DIR`). Notebook `00` memverifikasi
 data dan lingkungan (35 cek). Diukur pada clone bersih dengan venv baru (21 Okt 2026): instalasi ± 2,5 menit, seluruh pipeline (notebook 00–07)
-± 5 menit di CPU laptop. Hash SHA-256 CSV yang dihasilkan harus sama dengan yang tertulis di atas; untuk versi v4:
+± 3,5 menit di CPU laptop. Hash SHA-256 CSV yang dihasilkan harus sama dengan yang tertulis di atas; untuk versi v4:
 `627a5cc0d79798dc70db0d3087cfdb13c889dc8d08131eea306425c08de56afe`.

@@ -151,6 +151,6 @@ powershell -ExecutionPolicy Bypass -File run_all.ps1      # -> submissions/MesQu
 
 Place the data in `tactical/` and `broadcast/` at the repository root (or point `MTAH_DATA_DIR` at it). Notebook `00`
 verifies the data and the environment (35 checks). Measured on a clean clone with a fresh virtual environment
-(21 Oct 2026): installation ± 2.5 min, full pipeline (notebooks 00–07) ± 5 min on a laptop CPU. The SHA-256 of the
+(21 Oct 2026): installation ± 2.5 min, full pipeline (notebooks 00–07) ± 3.5 min on a laptop CPU. The SHA-256 of the
 generated CSV must equal the one given at the top of this document; for the current version v4 it is
 `627a5cc0d79798dc70db0d3087cfdb13c889dc8d08131eea306425c08de56afe`.
