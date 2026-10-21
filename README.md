@@ -5,7 +5,7 @@ memberi label `H` / `A` / `D` / `X` pada setiap 199.319 frame video tactical FC 
 
 Seluruh pipeline ditulis sebagai **Jupyter notebook** berurutan, dengan penjelasan markdown di setiap langkah.
 Rencana kerja dan status ada di [docs/RENCANA.md](docs/RENCANA.md); catatan eksperimen di
-[docs/experiment_log.md](docs/experiment_log.md); dokumen teknis di [docs/technical_report.md](docs/technical_report.md).
+[docs/experiment_log.md](docs/experiment_log.md); dokumen teknis (bahasa Inggris, untuk panitia) di [docs/technical_report.md](docs/technical_report.md), salinan kerja berbahasa Indonesia di [docs/technical_report_id.md](docs/technical_report_id.md).
 
 > **Data pertandingan tidak ada di repo ini** dan tidak boleh di-commit — lisensinya khusus lomba.
 
