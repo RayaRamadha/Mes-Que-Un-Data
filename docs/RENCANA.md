@@ -219,7 +219,7 @@ Setiap eksperimen satu baris di `docs/experiment_log.md`:
 | Fase | Status | Catatan |
 |---|---|---|
 | Skrip uji coba lama (`.py`) | 🗑️ dihapus | pelajarannya tercatat di laporan `cache/*.txt` lama; dibangun ulang di Fase 1 |
-| Fase 0 — Fondasi | ✅ 20 Okt (kecuali 0.1) | git + submodule resmi + nbstripout, `.venv` Py 3.11 dipin, `common.ipynb`, `00_setup_cek_data.ipynb` **35/35 PASS**, run_all, README, log, kerangka laporan. **0.1 nama & anggota tim masih terbuka** |
+| Fase 0 — Fondasi | ✅ 20–21 Okt | git + submodule resmi + nbstripout, `.venv` Py 3.11 dipin, `common.ipynb`, `00_setup_cek_data.ipynb` **35/35 PASS**, run_all, README, log, kerangka laporan. 0.1: tim **Més Que Un Data**, 5 anggota (syarat 3–5 terpenuhi) |
 | Fase 1 — Bangun ulang + submission pertama | ✅ 20 Okt | 01 preprocess (regresi identik), 02 EDA GT publik (kesimpulan desain), 03 bola mati v3, 06 v0 → file valid, reproduksi hash identik dari nol (± 1 menit). Publik spellF1 0,344 [0,19–0,50] vs baseline 0,326. **Hambatan: presisi D (0,52)** |
 | Fase 2 — Model possession v1 | ✅ 2.1–2.7 20 Okt (2.7: tiga eksperimen di `07`, semua ditolak — decoder v2 dipertahankan) | 04 fitur (bentuk tim tersedia 94% frame), 05 pseudo-label + logistik bentuk tim (CV AUC 0,91; publik akurasi tim 0,92 juga saat bola hilang), 06 v1 → publik spellF1 **0,538 [0,32–0,74]**. Berikutnya 3.1 presisi D, lalu 2.7 batas |
 | Fase 3 — Peningkatan | 🔶 3.1 + 3.2 ✅ 20 Okt | 03 v5 (jangkar, aktivitas operan, syarat isyarat henti) → publik presisi/recall D 0,85/0,81; `Team` tag set piece = tim pengambil (geometri) → prior restart; submission v3 publik spellF1 **0,637 [0,40–0,81]**, macroF1 0,874. Sisa: D pendek terlewat, tim pengambil lemparan ke dalam; 3.3–3.4 berjalan di `07` |

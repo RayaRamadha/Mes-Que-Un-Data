@@ -1,6 +1,6 @@
 # Ball possession dari tracking otomatis — dokumen teknis
 
-**Tim:** Més Que Un Data · **Repo:** _(URL publik)_ · **File:** _(nama final ditetapkan di Fase 5)_ · **SHA-256 CSV:** _(diisi saat submit)_
+**Tim:** Més Que Un Data — Raya Ramadha Fitroh, Fauzan Ahsanudin Alfikri, Gabriel Edbert Liandrew, Benedict Brian Joel Purba, Yan Ardhinaya Ardika · **Repo:** _(URL publik)_ · **File:** _(nama final ditetapkan di Fase 5)_ · **SHA-256 CSV:** _(diisi saat submit)_
 
 > **Status: draf (20 Okt 2026), versi pipeline v3.** Struktur mengikuti SUBMISSION.md. Difinalkan di Fase 4.3 lalu
 > diekspor ke PDF bernama tim. Hanya angka agregat — tidak ada data per frame di dokumen ini. Angka GT publik selalu

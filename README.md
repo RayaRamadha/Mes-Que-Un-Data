@@ -67,4 +67,10 @@ Setiap notebook diakhiri cek otomatis; run berhenti di notebook pertama yang gag
 
 ## Tim
 
-**Més Que Un Data** — anggota: _(diisi)_
+**Més Que Un Data** (5 anggota):
+
+- Raya Ramadha Fitroh
+- Fauzan Ahsanudin Alfikri
+- Gabriel Edbert Liandrew
+- Benedict Brian Joel Purba
+- Yan Ardhinaya Ardika
