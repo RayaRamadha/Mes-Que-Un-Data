@@ -4,6 +4,7 @@
 
 - artefak/yolo/best.pt (+ student_key.json): YOLO26s ball detector fine-tuned on auto-labelled tactical frames (section 2b).
   Without it, section 2b re-creates the labels and retrains (± 2 GPU hours, not bit-reproducible).
+  artefak/yolo/results.csv is its training log (loss and validation metrics per epoch), read by the training report.
 - artefak/kit/kit3_*: LightGBM kit-colour classifiers H / A / other (section 7b.1).
 These are model weights, not match data: they cannot reconstruct tracking or video.
 """
@@ -17,6 +18,7 @@ CACHE = ROOT / "cache"
 COPIES = [
     (HERE / "artefak/yolo/best.pt", CACHE / "yolo/student/weights/best.pt"),
     (HERE / "artefak/yolo/student_key.json", CACHE / "yolo/student_key.json"),
+    (HERE / "artefak/yolo/results.csv", CACHE / "yolo/student/results.csv"),
 ] + [(HERE / "artefak/kit" / "kit3_{}{}".format(s, x), CACHE / "touch" / "kit3_{}{}".format(s, x))
      for s in ("tactical", "broadcast") for x in (".txt", ".json", "_key.json")]
 

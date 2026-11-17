@@ -4,14 +4,17 @@ Solution for [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/
 `H` / `A` / `D` / `X` for each of the 199,319 frames of the FC Barcelona – Athletic Club tactical video.
 
 - **Submitted file:** [submissions/MesQueUnData.csv](submissions/MesQueUnData.csv), final pipeline, included in the
-  repository. A run of the notebook overwrites it, so `git status` stays clean when the reproduction is byte-identical
+  repository. A run of the notebook overwrites it, so `git status submissions` shows no change when the reproduction
+  is byte-identical
 - **SHA-256:** `8ba09b17d35612bcd39e362819f75aef22c16a2416b426803e60fddf49cbacf2`
 - **Technical document:** [docs/technical_report.md](docs/technical_report.md)
 - **Experiment log:** [docs/experiment_log.md](docs/experiment_log.md), 110 entries: what was tried, the evidence, and
   whether it was adopted or rejected
 
-> **No match data is in this repository** (competition licence). `.gitignore` excludes `data/`, videos, `cache/` and
-> `submissions/` (except the submitted file, which holds one H/A/D/X label per frame and nothing else). Notebook outputs are stripped on commit (`nbstripout`), because they contain match frames.
+> **No match data is in this repository** (competition licence). `.gitignore` excludes `data/`, videos, `cache/`,
+> `external_data/` (except its README and download scripts) and `submissions/` (except the submitted file, which holds
+> one H/A/D/X label per frame and nothing else). Notebook outputs are stripped on commit (`nbstripout`), because they
+> contain match frames.
 
 ## What is here
 
@@ -19,11 +22,15 @@ Solution for [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/
 notebooks/pipeline/
   MesQueUnData.ipynb            the whole pipeline in one notebook (markdown explains every step; glossary of kept names)
   models/                       6 possession models (BiGRU/TCN) trained on external open data + meta.json (SHA-256)
-  artefak/                      trained YOLO26s ball detector + kit-colour classifiers (installed by pasang_artefak.py)
+  artefak/                      trained YOLO26s ball detector (+ training log) and kit-colour classifiers
+                                (installed by pasang_artefak.py)
   idsse_loader.py               IDSSE (DFL) XML parser, used to validate the ball-out rule
   aturan_keluar.py              Laws-of-the-Game rule "last touch before the ball goes out" (section 8d)
   pasang_artefak.py             copies artefak/ into cache/
 external/more-than-a-hack-2027/ official repository (git submodule): games.py, scorer, public 5-minute GT
+external_data/                  sources and pinned versions of the external datasets + download scripts (no data)
+submissions/MesQueUnData.csv    the submitted file
+docs/                           technical report, experiment log, flowchart, method figures, hard-case animation
 run.ps1 / run.sh                one command: run the notebook, validate the CSV, print its SHA-256
 requirements.txt / -lock.txt    pinned dependencies (Python 3.11, PyTorch 2.6 CUDA 12.4)
 ```
@@ -62,8 +69,13 @@ file explains how to retrain the models.
 
 ```bash
 .venv\Scripts\python notebooks\pipeline\pasang_artefak.py        # once: installs the trained YOLO / kit weights
+powershell -ExecutionPolicy Bypass -File external_data\download_external_data.ps1 -Only idsse   # once: IDSSE (2.5 GB)
 powershell -ExecutionPolicy Bypass -File run.ps1                 # or: bash run.sh
 ```
+
+The first run needs an internet connection: Ultralytics downloads the public COCO weights `yolo26x.pt` (automatic
+labeller) and `yolo11x.pt` (person detector) on first use. A CUDA GPU is expected; on CPU the YOLO steps are far slower
+and not guaranteed to give the same detections.
 
 The script executes the notebook, writes `submissions/MesQueUnData.csv`, runs the official
 `validate_submission.py`, and prints the SHA-256. That hash must equal the one above. You can also open the notebook
@@ -73,7 +85,7 @@ with the kernel *Python 3.11 (.venv Més Que Un Data)* and choose *Run All*.
 
 | Run | Time | Notes |
 |---|---|---|
-| first run | ± 2.5–3 h | ball detection over the whole tactical video (YOLO, about 1.5–2 h), touch detection on both videos, audio whistle scores; IDSSE parsing takes 2 min |
+| first run | ± 2.5–3 h | ball detection over the whole tactical video (YOLO, about 1.5–2 h), touch detection on both videos, audio whistle scores; IDSSE parsing takes 2 min. Section 2b also re-creates the automatic YOLO labels (5,000 frames) but does not retrain: the shipped `best.pt` matches its key |
 | later runs | ± 15–20 min | everything is cached in `cache/`; nothing is trained, because the possession models, YOLO and kit weights are included |
 
 Close other heavy applications first: the notebook peaks at about 4.5 GB RAM.
