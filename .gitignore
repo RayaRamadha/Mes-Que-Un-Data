@@ -1,37 +1,42 @@
 # =============================================================================================
-# Repo ini akan PUBLIK. Data pertandingan berlisensi khusus lomba dan TIDAK BOLEH di-commit,
-# begitu juga turunan yang bisa merekonstruksinya (RULES.md). Kalau ragu: tambahkan di sini dulu.
+# This repository is PUBLIC. The match data is licensed for the competition only and must NOT be committed,
+# nor anything derived from it that could reconstruct it (RULES.md). When in doubt, add it here first.
 # =============================================================================================
 
-# -- data pertandingan (gated) -----------------------------------------------------------------
+# -- match data (gated) ------------------------------------------------------------------------
 tactical/
 broadcast/
 data/
 *.mp4
+# exception: schematic animation with synthetic positions (no match data)
+!docs/hard_cases_illustration.mp4
 *_atd.txt
 *_atd.xml
 *_homography.csv
 *_smart_tagging.xml
 
-# -- turunan data & hasil ------------------------------------------------------------------------
+# -- labelled external data (SkillCorner Open Data, Metrica sample data, IDSSE; downloaded, see README) -------
+external_data/
+
+# -- derived data & outputs --------------------------------------------------------------------
 cache/
 submissions/
 *.npz
 *.pkl
 *.parquet
 
-# -- ground truth privat (jaga-jaga; kita hanya punya yang publik, di dalam submodule) ------------
+# -- private ground truth (just in case; we only have the public one, inside the submodule) ---------
 *_possession_gt.csv
 *_possession_gt_meta.json
 
-# -- salinan unduhan repo resmi (sudah dipakai lewat submodule external/) -------------------------
+# -- downloaded copies of the official repository (used through the external/ submodule instead) -----
 more-than-a-hack-2027-main/
 more-than-a-hack-2027-main.zip
 
-# -- laporan teknis hasil ekspor (dikirim lewat form, bukan lewat repo) ---------------------------
+# -- exported technical report (sent through the form, not the repository) -----------------------
 *.pdf
 
-# -- lingkungan & editor -----------------------------------------------------------------------
+# -- environment & editor ----------------------------------------------------------------------
 .venv/
 venv/
 __pycache__/
@@ -40,3 +45,6 @@ __pycache__/
 .idea/
 .vscode/
 .DS_Store
+
+# -- local submission folder (CSV, document, repository snapshot for the form) ------------------
+pengumpulan/

@@ -1,0 +1,1 @@
+{"n": 5000, "teacher": "yolo26x.pt", "agree_m": 1.0, "radius_m": 1.5, "conf": 0.1, "crop": 640, "neg_every": 5, "student": "yolo26s.pt", "epochs": 25, "batch": 16}

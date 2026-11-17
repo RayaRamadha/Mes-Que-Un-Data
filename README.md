@@ -1,76 +1,84 @@
-# More than a Hack 2027 — Ball Possession · solusi tim **Més Que Un Data**
+# More than a Hack 2027: Ball Possession · team **Més Que Un Data**
 
-Solusi untuk [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/more-than-a-hack-2027):
-memberi label `H` / `A` / `D` / `X` pada setiap 199.319 frame video tactical FC Barcelona – Athletic Club.
+Solution for [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/more-than-a-hack-2027): one label
+`H` / `A` / `D` / `X` for each of the 199,319 frames of the FC Barcelona – Athletic Club tactical video.
 
-Seluruh pipeline ditulis sebagai **Jupyter notebook** berurutan, dengan penjelasan markdown di setiap langkah.
-Rencana kerja dan status ada di [docs/RENCANA.md](docs/RENCANA.md); catatan eksperimen di
-[docs/experiment_log.md](docs/experiment_log.md); dokumen teknis (bahasa Inggris, untuk panitia) di [docs/technical_report.md](docs/technical_report.md), salinan kerja berbahasa Indonesia di [docs/technical_report_id.md](docs/technical_report_id.md).
+- **Submitted file:** `submissions/MesQueUnData.csv`, final pipeline
+- **SHA-256:** `8ba09b17d35612bcd39e362819f75aef22c16a2416b426803e60fddf49cbacf2`
+- **Technical document:** [docs/technical_report.md](docs/technical_report.md)
+- **Experiment log:** [docs/experiment_log.md](docs/experiment_log.md), 110 entries: what was tried, the evidence, and
+  whether it was adopted or rejected
 
-> **Data pertandingan tidak ada di repo ini** dan tidak boleh di-commit — lisensinya khusus lomba.
+> **No match data is in this repository** (competition licence). `.gitignore` excludes `data/`, videos, `cache/` and
+> `submissions/`. Notebook outputs are stripped on commit (`nbstripout`), because they contain match frames.
 
-## Struktur
+## What is here
 
 ```
-notebooks/
-  common.ipynb               konstanta & fungsi bersama (dimuat lewat %run, tidak dijalankan sendiri)
-  00_setup_cek_data.ipynb    cek lingkungan, kelengkapan & keselarasan data, uji asap scorer
-  ...                        tahap berikutnya ditambahkan per fase (lihat docs/RENCANA.md)
-docs/                        rencana, log eksperimen, dokumen teknis
-external/more-than-a-hack-2027/   repo resmi (git submodule): games.py, scorer, GT publik 5 menit
-run_all.ps1 / run_all.sh     menjalankan semua notebook berurutan
-requirements.txt             dependensi langsung (dipin)
-requirements-lock.txt        kunci lengkap pip freeze
+notebooks/pipeline/
+  MesQueUnData.ipynb            the whole pipeline in one notebook (markdown explains every step; glossary of kept names)
+  models/                       6 possession models (BiGRU/TCN) trained on external open data + meta.json (SHA-256)
+  artefak/                      trained YOLO26s ball detector + kit-colour classifiers (installed by pasang_artefak.py)
+  idsse_loader.py               IDSSE (DFL) XML parser, used to validate the ball-out rule
+  aturan_keluar.py              Laws-of-the-Game rule "last touch before the ball goes out" (section 8d)
+  pasang_artefak.py             copies artefak/ into cache/
+external/more-than-a-hack-2027/ official repository (git submodule): games.py, scorer, public 5-minute GT
+run.ps1 / run.sh                one command: run the notebook, validate the CSV, print its SHA-256
+requirements.txt / -lock.txt    pinned dependencies (Python 3.11, PyTorch 2.6 CUDA 12.4)
 ```
 
-Dibuat saat dijalankan (gitignored): `cache/` (artefak antara + `cache/reports/` laporan agregat tiap notebook)
-dan `submissions/` (file CSV).
-
-## Instalasi
-
-Python **3.11**.
+## 1. Install (Python 3.11)
 
 ```bash
 git clone --recurse-submodules https://github.com/RayaRamadha/Mes-Que-Un-Data.git
 cd Mes-Que-Un-Data
-py -3.11 -m venv .venv                                     # macOS/Linux: python3.11 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements-lock.txt
-.venv\Scripts\nbstripout --install --attributes .gitattributes   # hanya untuk kontributor
+py -3.11 -m venv .venv                                         # macOS/Linux: python3.11 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements-lock.txt   # macOS/Linux: .venv/bin/python
+.venv\Scripts\python -m ipykernel install --sys-prefix --name mesqueundata --display-name "Python 3.11 (.venv Més Que Un Data)"
+.venv\Scripts\python -m ipykernel install --sys-prefix --name python3
 ```
 
-`nbstripout` membersihkan output notebook secara otomatis saat commit, supaya tidak ada angka atau plot turunan
-data yang ikut terpublikasi. Output tetap ada di salinan lokal.
+Installing takes ± 2–3 minutes plus the PyTorch CUDA wheel (2.5 GB).
 
-## Data
+## 2. Data
 
-Unduh paket data (lihat [DATA.md resmi](external/more-than-a-hack-2027/DATA.md)) dan letakkan di akar repo:
+| What | Where | Needed for |
+|---|---|---|
+| competition bundle: `BAR-ATH_tactical_*` (ATD xml/txt, homography, smart tagging, **video**) | `data/tactical/` | everything |
+| `BAR-ATH_broadcast_*` (ATD xml/txt, homography, **video**) | `data/broadcast/` | everything |
+| IDSSE, 7 matches (`DFL_02_01_*`, `DFL_03_02_*`, `DFL_04_03_*` XML) from huggingface.co/datasets/pysport/idsse-data (CC BY 4.0) | `external_data/idsse/` | section 8d validation (or set `BALLOUT_STAGE = "force"`) |
+| SkillCorner Open Data, Metrica sample data | `external_data/skillcorner`, `external_data/metrica` | only for **retraining** the possession models (not needed: weights are included) |
 
-```
-tactical/   BAR-ATH_tactical_atd.xml, _atd.txt, _homography.csv, _smart_tagging.xml  (video opsional)
-broadcast/  BAR-ATH_broadcast_atd.xml, _atd.txt, _homography.csv  (video opsional)
-```
+`MTAH_DATA_DIR` may point to another folder that contains `tactical/` and `broadcast/`.
 
-Atau taruh di tempat lain dan arahkan `MTAH_DATA_DIR` ke folder yang berisi `tactical/` dan `broadcast/`.
-
-## Reproduksi
-
-```powershell
-powershell -ExecutionPolicy Bypass -File run_all.ps1
-```
+## 3. Run
 
 ```bash
-./run_all.sh
+.venv\Scripts\python notebooks\pipeline\pasang_artefak.py        # once: installs the trained YOLO / kit weights
+powershell -ExecutionPolicy Bypass -File run.ps1                 # or: bash run.sh
 ```
 
-Setiap notebook diakhiri cek otomatis; run berhenti di notebook pertama yang gagal. Mulai dari tengah:
-`run_all.ps1 -From 03` atau `./run_all.sh 03`.
+The script executes the notebook, writes `submissions/MesQueUnData.csv`, runs the official
+`validate_submission.py`, and prints the SHA-256. That hash must equal the one above. You can also open the notebook
+with the kernel *Python 3.11 (.venv Més Que Un Data)* and choose *Run All*.
 
-## Tim
+**Runtime** on a laptop with an RTX 3050 Ti (4 GB) and 16 GB RAM:
 
-**Més Que Un Data** (5 anggota):
+| Run | Time | Notes |
+|---|---|---|
+| first run | ± 2.5–3 h | ball detection over the whole tactical video (YOLO, about 1.5–2 h), touch detection on both videos, audio whistle scores; IDSSE parsing takes 2 min |
+| later runs | ± 15–20 min | everything is cached in `cache/`; nothing is trained, because the possession models, YOLO and kit weights are included |
 
-- Raya Ramadha Fitroh
-- Fauzan Ahsanudin Alfikri
-- Gabriel Edbert Liandrew
-- Benedict Brian Joel Purba
-- Yan Ardhinaya Ardika
+Close other heavy applications first: the notebook peaks at about 4.5 GB RAM.
+
+## 4. Pipeline in one paragraph
+
+The ball signal comes from three sources: tactical tracking, the broadcast ball (aligned through player positions)
+and our own YOLO26 detector trained on auto-labelled tactical frames. Dead ball is detected from collective
+behaviour, snapped to restart kicks and line crossings, and backed by a whistle rule from the audio. An ensemble of
+six sequence models trained on 23 external labelled matches gives H/A log-odds. A three-state Viterbi decoder combines
+them with touch evidence from both videos (kit colour + contact). Finally, a Laws-of-the-Game rule restores the last
+touch before corners and goal kicks; it was validated on 7 IDSSE matches.
+
+Every choice was made by leave-match-out cross-validation on external data. The public 5-minute GT is used only as a
+correctness check. Details are in [docs/technical_report.md](docs/technical_report.md).

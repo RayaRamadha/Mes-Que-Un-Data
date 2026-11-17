@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1150" viewBox="0 0 1280 1150" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Més Que Un Data · ball-possession pipeline</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#737373"/>
+    </marker>
+    <style>
+      .t  { font-size: 13px; font-weight: 600; fill: #111827; }
+      .b  { font-size: 11.5px; fill: #374151; }
+      .g  { font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+      .h  { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; fill: #64748b; }
+      .lab{ font-size: 10.5px; fill: #64748b; font-style: italic; }
+      .ln { stroke: #475569; stroke-width: 1.6; fill: none; }
+      .lnd{ stroke: #737373; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="1150" fill="#ffffff"/>
+
+  <!-- title -->
+  <text x="40" y="36" font-size="20" font-weight="700" fill="#0f172a">Més Que Un Data · ball-possession pipeline (submitted system)</text>
+  <text x="40" y="58" font-size="12.5" fill="#64748b">One notebook, notebooks/pipeline/MesQueUnData.ipynb · section numbers refer to the notebook · no BAR-ATH ground truth is used for training or selection</text>
+
+  <!-- ===== inputs ===== -->
+  <text x="40" y="84" class="h">BAR-ATH MATCH ASSETS</text>
+  <g>
+    <rect x="40" y="90" width="160" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="52" y="113" class="t">Tactical tracking</text><text x="52" y="132" class="b">ATD + homography</text>
+    <rect x="215" y="90" width="170" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="227" y="113" class="t">Broadcast tracking</text><text x="227" y="132" class="b">ATD + homography</text>
+    <rect x="400" y="90" width="160" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="412" y="113" class="t">Tactical video</text><text x="412" y="132" class="b">frames + audio</text>
+    <rect x="575" y="90" width="150" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="587" y="113" class="t">Broadcast video</text><text x="587" y="132" class="b">frames</text>
+    <rect x="740" y="90" width="180" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="752" y="113" class="t">Smart Tagging</text><text x="752" y="132" class="b">set pieces, restart takers</text>
+  </g>
+
+  <!-- ===== row 1: ball + dead ball ===== -->
+  <rect x="40" y="190" width="520" height="230" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="54" y="210" class="g" fill="#1d4ed8">1–2b · BALL</text>
+  <rect x="55" y="222" width="235" height="96" rx="8" fill="#ffffff" stroke="#3b82f6"/>
+  <text x="67" y="242" class="t">Broadcast alignment</text>
+  <text x="67" y="260" class="b">broadcast → tactical time offset</text>
+  <text x="67" y="276" class="b">per half, found by matching</text>
+  <text x="67" y="292" class="b">player positions</text>
+  <rect x="305" y="222" width="240" height="96" rx="8" fill="#ffffff" stroke="#3b82f6"/>
+  <text x="317" y="242" class="t">YOLO26s ball detector</text>
+  <text x="317" y="260" class="b">auto-labels: both trackers agree</text>
+  <text x="317" y="276" class="b">→ COCO YOLO26x teacher (1.5 m)</text>
+  <text x="317" y="292" class="b">detect whole video + Viterbi track</text>
+  <rect x="55" y="334" width="490" height="72" rx="8" fill="#ffffff" stroke="#3b82f6"/>
+  <text x="67" y="354" class="t">Fused ball</text>
+  <text x="67" y="372" class="b">tactical ball + aligned broadcast fill (bridged edges, replays at weight 0)</text>
+  <text x="67" y="388" class="b">+ anchored YOLO fills; interpolation ≤ 1 s → ball on 67% of graded frames</text>
+
+  <rect x="575" y="190" width="345" height="230" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="589" y="210" class="g" fill="#b45309">3–4 · DEAD BALL (D)</text>
+  <rect x="590" y="222" width="315" height="96" rx="8" fill="#ffffff" stroke="#d97706"/>
+  <text x="602" y="242" class="t">Dead-ball detector</text>
+  <text x="602" y="260" class="b">calm players · no passing · ball gap</text>
+  <text x="602" y="276" class="b">ball near a line · replay / close-up</text>
+  <text x="602" y="292" class="b">set-piece window → 2-state Viterbi</text>
+  <rect x="590" y="334" width="315" height="72" rx="8" fill="#ffffff" stroke="#d97706"/>
+  <text x="602" y="354" class="t">Boundaries &amp; forced D</text>
+  <text x="602" y="372" class="b">end → restart kick · start → line crossing</text>
+  <text x="602" y="388" class="b">forced D at half-time &amp; before kick-offs</text>
+
+  <!-- input arrows -->
+  <path class="ln" d="M180,150 V188" marker-end="url(#arr)"/>
+  <path class="ln" d="M300,150 V188" marker-end="url(#arr)"/>
+  <path class="ln" d="M480,150 V188" marker-end="url(#arr)"/>
+  <path class="ln" d="M650,150 V188" marker-end="url(#arr)"/>
+  <text x="656" y="176" class="lab">replay / close-up</text>
+  <path class="ln" d="M830,150 V188" marker-end="url(#arr)"/>
+  <text x="836" y="176" class="lab">set pieces</text>
+  <!-- inside row 1 -->
+  <path class="ln" d="M172,318 V332" marker-end="url(#arr)"/>
+  <path class="ln" d="M425,318 V332" marker-end="url(#arr)"/>
+  <path class="ln" d="M747,318 V332" marker-end="url(#arr)"/>
+  <path class="ln" d="M545,370 H588" marker-end="url(#arr)"/>
+
+  <!-- ===== row 2: touch evidence + possession model ===== -->
+  <rect x="40" y="446" width="430" height="202" rx="12" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="54" y="465" class="g" fill="#047857">7b · TOUCH EVIDENCE FROM VIDEO</text>
+  <rect x="55" y="476" width="400" height="62" rx="8" fill="#ffffff" stroke="#059669"/>
+  <text x="67" y="495" class="t">Kit-colour classifier (H / A / other)</text>
+  <text x="67" y="512" class="b">YOLO11x person boxes on both videos · LightGBM</text>
+  <text x="67" y="528" class="b">labels from the tracking teams, not by hand</text>
+  <rect x="55" y="550" width="400" height="84" rx="8" fill="#ffffff" stroke="#059669"/>
+  <text x="67" y="569" class="t">Touches → evidence</text>
+  <text x="67" y="586" class="b">kinks in the YOLO ball path + box contact (t−3 … t+3)</text>
+  <text x="67" y="602" class="b">toucher team gets ±β log-odds until the next touch (≤ 1 s)</text>
+  <text x="67" y="618" class="b">β = 4 tactical · 2 broadcast ball · 0.5 broadcast candidate</text>
+  <path class="ln" d="M255,538 V548" marker-end="url(#arr)"/>
+
+  <rect x="490" y="446" width="430" height="202" rx="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="504" y="465" class="g" fill="#6d28d9">5–7 · POSSESSION MODEL (H vs A)</text>
+  <rect x="505" y="476" width="400" height="62" rx="8" fill="#ffffff" stroke="#7c3aed"/>
+  <text x="517" y="495" class="t">Features at 10 fps</text>
+  <text x="517" y="512" class="b">47 per step: ball, ball-local, team shape,</text>
+  <text x="517" y="528" class="b">ball motion, arrival times + 8 nearest players per team</text>
+  <rect x="505" y="550" width="400" height="84" rx="8" fill="#ffffff" stroke="#7c3aed"/>
+  <text x="517" y="569" class="t">Ensemble of 6 sequence models</text>
+  <text x="517" y="586" class="b">BiGRU-set · TCN · TCN-set, 2 seeds each</text>
+  <text x="517" y="602" class="b">both viewpoints averaged (exact H↔A symmetry)</text>
+  <text x="517" y="618" class="b">→ H/A log-odds per step</text>
+  <path class="ln" d="M705,538 V548" marker-end="url(#arr)"/>
+
+  <!-- row 1 → row 2 -->
+  <path class="ln" d="M255,406 V444" marker-end="url(#arr)"/>
+  <text x="262" y="432" class="lab">YOLO ball path</text>
+  <path class="ln" d="M520,406 V444" marker-end="url(#arr)"/>
+  <text x="527" y="434" class="lab">ball + players</text>
+  <!-- videos into kit classifier -->
+  <path class="ln" d="M650,90 V66 H28 V507 H53" marker-end="url(#arr)"/>
+  <path class="ln" d="M480,90 V66"/>
+  <text x="24" y="330" class="lab" text-anchor="middle" transform="rotate(-90 24 330)">both videos</text>
+
+  <!-- ===== decoder and rules ===== -->
+  <rect x="40" y="684" width="880" height="62" rx="10" fill="#f0fdfa" stroke="#0d9488"/>
+  <text x="54" y="704" class="t">8 · Three-state Viterbi decoder (H / A / D) at 10 fps</text>
+  <text x="54" y="724" class="b">switching cost 10 · restart prior: the tagged taker owns the first 2 s after a corner, goal kick or free kick · upsampled to 25 fps</text>
+  <path class="ln" d="M255,634 V682" marker-end="url(#arr)"/>
+  <path class="ln" d="M705,634 V682" marker-end="url(#arr)"/>
+  <path class="ln" d="M905,370 H938 V666 H880 V682" marker-end="url(#arr)"/>
+  <text x="886" y="662" class="lab" text-anchor="end">D segments</text>
+
+  <rect x="40" y="774" width="880" height="50" rx="10" fill="#f0fdfa" stroke="#0d9488"/>
+  <text x="54" y="794" class="t">8b · Referee whistle (tactical video audio)</text>
+  <text x="54" y="812" class="b">two-tone score ≥ 2.2; a D that starts ≤ 3 s after a whistle heard in live play starts at the whistle</text>
+  <path class="ln" d="M480,746 V772" marker-end="url(#arr)"/>
+
+  <rect x="40" y="852" width="880" height="72" rx="10" fill="#f0fdfa" stroke="#0d9488"/>
+  <text x="54" y="872" class="t">8d · Laws-of-the-Game ball-out rule (corners, goal kicks)</text>
+  <text x="54" y="890" class="b">if the label just before the ball goes out = taker team R, insert the opponents' possession from their last touch until the ball goes out</text>
+  <text x="54" y="906" class="b">last touch = nearest opponent ≤ 1.5 m from the ball and closer than any R player, within 5 s · 13 insertions in this match</text>
+  <path class="ln" d="M480,824 V850" marker-end="url(#arr)"/>
+
+  <rect x="40" y="952" width="880" height="56" rx="10" fill="#0f172a" stroke="#0f172a"/>
+  <text x="54" y="973" font-size="13" font-weight="600" fill="#ffffff">9 · MesQueUnData.csv</text>
+  <text x="54" y="992" font-size="11.5" fill="#cbd5e1">199,319 frames · H / A / D on graded frames, X elsewhere · official validate_submission.py: Valid · SHA-256 8ba09b17…</text>
+  <path class="ln" d="M480,924 V950" marker-end="url(#arr)"/>
+
+  <rect x="40" y="1036" width="880" height="44" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="5 4"/>
+  <text x="54" y="1056" class="t">Public GT window (5 min, 17 possessions): correctness check only</text>
+  <text x="54" y="1072" class="b">spellF1 0.741 [0.577–0.882] · macroF1 0.906 · 17 / 17 possessions (official baseline 0.33)</text>
+  <path class="lnd" d="M480,1008 V1034" marker-end="url(#arrd)"/>
+
+  <!-- ===== offline column ===== -->
+  <rect x="948" y="190" width="304" height="404" rx="12" fill="#fafafa" stroke="#a3a3a3" stroke-dasharray="6 4"/>
+  <text x="962" y="210" class="g" fill="#525252">OFFLINE TRAINING · OTHER MATCHES</text>
+  <rect x="960" y="222" width="280" height="80" rx="8" fill="#ffffff" stroke="#525252"/>
+  <text x="972" y="242" class="t">External labelled matches</text>
+  <text x="972" y="260" class="b">SkillCorner Open Data (20 matches)</text>
+  <text x="972" y="276" class="b">+ Metrica sample data (3 matches)</text>
+  <text x="972" y="292" class="b">label: team of the last possession event</text>
+  <rect x="960" y="336" width="280" height="100" rx="8" fill="#ffffff" stroke="#525252"/>
+  <text x="972" y="356" class="t">Leave-match-out CV (5 folds)</text>
+  <text x="972" y="374" class="b">official spellF1 on 23 matches</text>
+  <text x="972" y="390" class="b">chooses architecture, features,</text>
+  <text x="972" y="406" class="b">decoder cost and touch weights β</text>
+  <text x="972" y="422" class="b">≈ 0.81 (BAR-ATH gaps) · 0.84 (visible)</text>
+  <rect x="960" y="472" width="280" height="110" rx="8" fill="#ffffff" stroke="#525252"/>
+  <text x="972" y="492" class="t">Train 6 networks (all 23 matches)</text>
+  <text x="972" y="510" class="b">4 augmented copies per match:</text>
+  <text x="972" y="526" class="b">BAR-ATH ball-gap mask, tracking noise,</text>
+  <text x="972" y="542" class="b">lost tracks, half with H/A swapped;</text>
+  <text x="972" y="558" class="b">short possessions weighted more</text>
+  <text x="972" y="574" class="b">weights shipped with SHA-256</text>
+  <path class="lnd" d="M1100,302 V334" marker-end="url(#arrd)"/>
+  <path class="lnd" d="M1100,436 V470" marker-end="url(#arrd)"/>
+  <path class="lnd" d="M958,592 H907" marker-end="url(#arrd)"/>
+
+  <rect x="948" y="826" width="304" height="254" rx="12" fill="#fafafa" stroke="#a3a3a3" stroke-dasharray="6 4"/>
+  <text x="962" y="846" class="g" fill="#525252">VALIDATION &amp; RECORD</text>
+  <rect x="960" y="856" width="280" height="86" rx="8" fill="#ffffff" stroke="#525252"/>
+  <text x="972" y="876" class="t">IDSSE · 7 DFL matches (CC BY 4.0)</text>
+  <text x="972" y="894" class="b">validation only, never trained on</text>
+  <text x="972" y="910" class="b">D boundaries: dead F1 0.933 → 0.948</text>
+  <text x="972" y="926" class="b">ball-out rule: +0.0065 spellF1, 7/7</text>
+  <path class="lnd" d="M958,888 H922" marker-end="url(#arrd)"/>
+  <rect x="960" y="954" width="280" height="114" rx="8" fill="#f5f5f5" stroke="#a3a3a3" stroke-dasharray="4 3"/>
+  <text x="972" y="974" class="t" fill="#525252">Switched off (rejected)</text>
+  <text x="972" y="992" class="b">kept in the notebook; each failed its</text>
+  <text x="972" y="1008" class="b">pre-set decision rule:</text>
+  <text x="972" y="1028" class="b">switch re-timing · smoothed-ball training</text>
+  <text x="972" y="1044" class="b">nearest-player method · stacking</text>
+
+  <!-- ===== legend ===== -->
+  <g transform="translate(40,1108)">
+    <path class="ln" d="M0,6 H34" marker-end="url(#arr)"/><text x="42" y="10" class="b">data flow</text>
+    <path class="lnd" d="M120,6 H154" marker-end="url(#arrd)"/><text x="162" y="10" class="b">offline training / validation / check</text>
+    <rect x="390" y="0" width="12" height="12" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="408" y="10" class="b">ball</text>
+    <rect x="450" y="0" width="12" height="12" rx="3" fill="#fffbeb" stroke="#fcd34d"/><text x="468" y="10" class="b">dead ball</text>
+    <rect x="540" y="0" width="12" height="12" rx="3" fill="#ecfdf5" stroke="#6ee7b7"/><text x="558" y="10" class="b">video touches</text>
+    <rect x="652" y="0" width="12" height="12" rx="3" fill="#f5f3ff" stroke="#c4b5fd"/><text x="670" y="10" class="b">possession model</text>
+    <rect x="780" y="0" width="12" height="12" rx="3" fill="#f0fdfa" stroke="#0d9488"/><text x="798" y="10" class="b">decoding &amp; rules</text>
+  </g>
+</svg>

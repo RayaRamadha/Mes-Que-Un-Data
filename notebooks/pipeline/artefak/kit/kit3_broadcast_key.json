@@ -1,0 +1,1 @@
+{"step": 40, "imgsz": 1280, "conf": 0.3, "half": false, "source": "broadcast", "person": "7bc158aa95c0ebfdd87f70f01653c1131b93e92522dbe15c228bcd742e773a24", "prm": {"objective": "multiclass", "num_class": 3, "learning_rate": 0.05, "num_leaves": 31, "min_data_in_leaf": 30, "verbose": -1, "num_threads": 4}, "version": 1}
