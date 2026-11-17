@@ -3,14 +3,15 @@
 Solution for [More than a Hack 2027, Phase 1](https://github.com/metrica-sports/more-than-a-hack-2027): one label
 `H` / `A` / `D` / `X` for each of the 199,319 frames of the FC Barcelona – Athletic Club tactical video.
 
-- **Submitted file:** `submissions/MesQueUnData.csv`, final pipeline
+- **Submitted file:** [submissions/MesQueUnData.csv](submissions/MesQueUnData.csv), final pipeline, included in the
+  repository. A run of the notebook overwrites it, so `git status` stays clean when the reproduction is byte-identical
 - **SHA-256:** `8ba09b17d35612bcd39e362819f75aef22c16a2416b426803e60fddf49cbacf2`
 - **Technical document:** [docs/technical_report.md](docs/technical_report.md)
 - **Experiment log:** [docs/experiment_log.md](docs/experiment_log.md), 110 entries: what was tried, the evidence, and
   whether it was adopted or rejected
 
 > **No match data is in this repository** (competition licence). `.gitignore` excludes `data/`, videos, `cache/` and
-> `submissions/`. Notebook outputs are stripped on commit (`nbstripout`), because they contain match frames.
+> `submissions/` (except the submitted file, which holds one H/A/D/X label per frame and nothing else). Notebook outputs are stripped on commit (`nbstripout`), because they contain match frames.
 
 ## What is here
 
@@ -50,6 +51,12 @@ Installing takes ± 2–3 minutes plus the PyTorch CUDA wheel (2.5 GB).
 | SkillCorner Open Data, Metrica sample data | `external_data/skillcorner`, `external_data/metrica` | only for **retraining** the possession models (not needed: weights are included) |
 
 `MTAH_DATA_DIR` may point to another folder that contains `tactical/` and `broadcast/`.
+
+The external datasets are not stored here. [external_data/README.md](external_data/README.md) lists their sources,
+pinned versions and labels, and one script downloads them at the exact versions we used:
+`powershell -ExecutionPolicy Bypass -File external_data\download_external_data.ps1 -Only idsse` (reproduction) or
+without `-Only` (everything, for retraining; `bash external_data/download_external_data.sh` on macOS/Linux). The same
+file explains how to retrain the models.
 
 ## 3. Run
 

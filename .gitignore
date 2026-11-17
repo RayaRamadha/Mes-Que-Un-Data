@@ -16,11 +16,18 @@ data/
 *_smart_tagging.xml
 
 # -- labelled external data (SkillCorner Open Data, Metrica sample data, IDSSE; downloaded, see README) -------
-external_data/
+external_data/*
+# exceptions: where the data comes from and how to download it (no data)
+!external_data/README.md
+!external_data/download_external_data.ps1
+!external_data/download_external_data.sh
 
 # -- derived data & outputs --------------------------------------------------------------------
 cache/
-submissions/
+submissions/*
+# exception: the submitted file itself (H/A/D/X per frame; a run of the notebook overwrites it, so `git status`
+# shows whether the reproduction is byte-identical)
+!submissions/MesQueUnData.csv
 *.npz
 *.pkl
 *.parquet

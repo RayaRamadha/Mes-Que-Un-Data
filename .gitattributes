@@ -5,3 +5,4 @@
 # trained weights: keep byte-exact on every OS (no line-ending conversion)
 notebooks/pipeline/artefak/** -text
 notebooks/pipeline/models/** -text
+submissions/*.csv -text
